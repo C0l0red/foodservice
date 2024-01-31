@@ -10,6 +10,9 @@ $ npm install
 
 # start docker for postgres
 $ docker-compose up -d
+
+# Run migrations and seed database
+$ npx prisma migrate dev
 ```
 
 ## Running the app
