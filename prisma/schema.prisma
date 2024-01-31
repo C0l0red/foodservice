@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid()) @map("user_id") @db.Uuid()
+  username  String   @unique @db.VarChar(20)
+  email     String   @unique @db.VarChar(80)
+  password  String   @db.VarChar(120)
+  role      Role     @default(USER)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  orders    Order[]
+
+  @@map("users")
+}
+
+model Food {
+  id          String      @id @default(uuid()) @map("food_id") @db.Uuid()
+  name        String      @unique @db.VarChar(50)
+  description String
+  price       Decimal     @db.Decimal()
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+  orders      OrderItem[] @ignore
+
+  @@map("foods")
+}
+
+model Order {
+  id         String      @id @default(uuid()) @map("order_id") @db.Uuid()
+  user       User        @relation(fields: [userId], references: [id], onDelete: NoAction)
+  userId     String      @map("user_id") @db.Uuid()
+  totalPrice Decimal     @db.Decimal()
+  items      OrderItem[]
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @map("updated_at")
+
+  @@map("orders")
+}
+
+model OrderItem {
+  orderId String @map("order_id") @db.Uuid()
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  itemId String @map("food_id") @db.Uuid()
+  item   Food   @relation(fields: [itemId], references: [id], onDelete: NoAction)
+
+  quantity Int
+
+  @@id([orderId, itemId])
+  @@map("order_items")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
