@@ -25,6 +25,8 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+The service would be live with a Swagger documentation at [localhost:3000/api](http://localhost:3000/api)
+
 ## Test
 
 ```bash
