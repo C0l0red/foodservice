@@ -2,9 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { FoodsController } from './foods.controller';
 import { FoodsService } from './foods.service';
 import { PrismaModule } from '../prisma/prisma.module';
-import { CreateFoodDto } from './dto/create-food.dto';
-import { Decimal } from '@prisma/client/runtime/library';
-import { FoodDto } from './dto/food.dto';
 import { mockCreateFoodDto, mockFoodDto } from '../../test/mocks';
 
 describe('FoodsController', () => {
